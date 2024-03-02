@@ -1,35 +1,27 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Container, CssBaseline } from '@mui/material';
+import { Route, Routes } from 'react-router-dom';
+import AppToolbar from './components/AppToolbar/AppToolbar.tsx';
+import RegisterForm from './features/Users/RegisterForm.tsx';
+import LoginForm from './features/Users/LoginForm.tsx';
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <CssBaseline/>
+      <header style={{marginBottom: 70}}>
+
+        <AppToolbar/>
+      </header>
+      <Container>
+        <Routes>
+          <Route path={'/register'} element={<RegisterForm/>}/>
+          <Route path={'/login'} element={<LoginForm/>}/>
+          <Route path={'*'} element={<h1>Not Found</h1>}/>
+        </Routes>
+      </Container>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
