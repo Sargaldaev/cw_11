@@ -3,6 +3,7 @@ import { Error } from 'mongoose';
 import Product from '../models/Product';
 import auth, { RequestWithUser } from '../middleware/auth';
 import { imagesUpload } from '../multer';
+import Category from '../models/Category';
 
 const productsRouter = express.Router();
 
@@ -28,15 +29,18 @@ productsRouter.post('/', auth, imagesUpload.single('image'), async (req, res, ne
 });
 
 productsRouter.get('/', async (req, res) => {
-  const category = req.query.category || 'All Items';
   try {
-    if (category === 'All Items') {
+
+    const category = req.query.category;
+
+    if (category === 'AllItems') {
       const product = await Product.find();
       return res.send(product);
-    } else if (category) {
-      const product = await Product.find({category});
-      return res.send(product);
     }
+
+    const product = await Product.find({category});
+    return res.send(product);
+
   } catch (error) {
     return res.send(error);
   }

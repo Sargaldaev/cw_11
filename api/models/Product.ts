@@ -1,10 +1,10 @@
-import mongoose from 'mongoose';
-import { Product } from '../types';
+import mongoose, { Types } from 'mongoose';
 import User from './User';
+import Category from './Category';
 
 const Schema = mongoose.Schema;
 
-const ProductSchema = new Schema<Product>({
+const ProductSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     required: true,
@@ -12,6 +12,19 @@ const ProductSchema = new Schema<Product>({
     validate: {
       validator: async (value: mongoose.Schema.Types.ObjectId) => User.findById(value),
       message: 'Users is not found!',
+    },
+  },
+
+  category: {
+    type: Schema.Types.ObjectId,
+    ref: 'Category',
+    required: true,
+    validate: {
+      validator: async (value: Types.ObjectId) => {
+        const category = await Category.findById(value);
+        return Boolean(category);
+      },
+      message: 'Category does not exist!',
     },
   },
 
@@ -31,12 +44,6 @@ const ProductSchema = new Schema<Product>({
   image: {
     type: String,
     required: true,
-  },
-
-  category: {
-    type: String,
-    required: true,
-    enum: ['Cars', 'Computers', 'Other'],
   },
 });
 

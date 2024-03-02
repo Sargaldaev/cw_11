@@ -3,6 +3,7 @@ import config from './config';
 import User from './models/User';
 import * as crypto from 'crypto';
 import Product from './models/Product';
+import Category from './models/Category';
 
 (async () => {
   await mongoose.connect(config.db);
@@ -11,6 +12,7 @@ import Product from './models/Product';
   try {
     await db.dropCollection('users');
     await db.dropCollection('products');
+    await db.dropCollection('categories');
   } catch (e) {
     console.log('Collections were not present, skipping drop...');
   }
@@ -32,10 +34,25 @@ import Product from './models/Product';
     },
   );
 
+  const [AllItems,Car, Phone, Laptop] = await Category.create(
+    {
+      title: 'AllItems',
+    },
+    {
+      title: 'Car',
+    },
+    {
+      title: 'Phone',
+    },
+    {
+      title: 'Laptop',
+    },
+  );
+
   await Product.create(
     {
       user: user_1._id,
-      category: 'Computers',
+      category: Laptop,
       title: 'notebook',
       description: 'notebook office work',
       price: 199.0,
@@ -43,7 +60,7 @@ import Product from './models/Product';
     },
     {
       user: user_1._id,
-      category: 'Computers',
+      category: Laptop,
       title: 'notebook',
       description: 'notebook play Game',
       price: 922.45,
@@ -51,15 +68,15 @@ import Product from './models/Product';
     },
     {
       user: user_1._id,
-      category: 'Cars',
-      title: 'Mersedes s class',
+      category: Car,
+      title: 'Mersedes ',
       description: 'Best car',
       price: 38978,
       image: 'fixtures/Mercedes1.jpg',
     },
     {
       user: user_2._id,
-      category: 'Cars',
+      category: Car,
       title: '2015 Mersedes s class',
       description: 'I\'d like to know if the Used 2015 Mersedes Model S 85D you have listed on Cars.com for $22,995 is still available.',
       price: 25000,
@@ -67,7 +84,7 @@ import Product from './models/Product';
     },
     {
       user: user_2._id,
-      category: 'Other',
+      category: Phone,
       title: 'Orange',
       description: 'eat orange',
       price: 34,
@@ -75,7 +92,7 @@ import Product from './models/Product';
     },
     {
       user: user_1._id,
-      category: 'Other',
+      category: Phone,
       title: 'Ball',
       description: 'Football playing ',
       price: 1926,

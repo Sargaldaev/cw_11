@@ -34,3 +34,36 @@ export interface ValidationError {
 export interface GlobalError {
   error: string;
 }
+
+export interface Product {
+  _id:string
+  title: string;
+  image: File | null;
+  price: number;
+}
+
+export interface ProductPost {
+  title: string;
+  image: File | null;
+  description: string;
+  price: string;
+  category: string;
+}
+
+export interface Category {
+  _id: string;
+  title: string;
+}
+
+export interface ProductInfo {
+  _id:string
+  user: {
+    username:string,
+    _id:string
+  },
+  title: string;
+  image: File | null;
+  description: string;
+  price: number;
+  category: string;
+}
