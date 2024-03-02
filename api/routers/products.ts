@@ -14,7 +14,7 @@ productsRouter.post('/', auth, imagesUpload.single('image'), async (req, res, ne
       user: user._id,
       title: req.body.title,
       description: req.body.description,
-      price: req.body.price,
+      price: Number(req.body.price),
       image: req.file ? 'images/' + req.file.filename : null,
       category: req.body.category,
     });
@@ -33,12 +33,18 @@ productsRouter.get('/', async (req, res) => {
 
     const category = req.query.category;
 
-    if (category === 'AllItems') {
+    if (category === 'AllItems' || !category) {
       const product = await Product.find();
       return res.send(product);
     }
 
-    const product = await Product.find({category});
+    const categoryById = await Category.findOne({_id: category});
+
+    if (!categoryById) {
+      return res.sendStatus(404);
+    }
+
+    const product = await Product.find({category: categoryById._id});
     return res.send(product);
 
   } catch (error) {
@@ -77,7 +83,7 @@ productsRouter.delete('/:id', auth, async (req, res, next) => {
 productsRouter.get('/:id', async (req, res) => {
   try {
     const _id = req.params.id;
-    const product = await Product.findOne({_id}).populate('user', 'username');
+    const product = await Product.findOne({_id}).populate('user', 'username phone');
     return res.send(product);
   } catch (e) {
     return res.sendStatus(500);

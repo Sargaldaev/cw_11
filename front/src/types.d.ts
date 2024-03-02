@@ -59,6 +59,7 @@ export interface ProductInfo {
   _id:string
   user: {
     username:string,
+    phone:string
     _id:string
   },
   title: string;

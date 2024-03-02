@@ -3,16 +3,18 @@ import {
   Alert,
   Box,
   Button,
-  Container, FormControl,
+  Container,
+  FormControl,
   Grid,
   InputLabel,
   MenuItem,
-  Select, SelectChangeEvent,
+  Select,
+  SelectChangeEvent,
   TextField,
   Typography
 } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../app/store';
@@ -44,13 +46,15 @@ const NewPost = () => {
       navigate('/login');
     }
     dispatch(fetchCategories());
-  }, [user, navigate]);
+  }, [user, navigate,dispatch]);
 
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
+    if (name === 'price' && isNaN(Number(value))) return;
+
     setState((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: name === 'price' ? value.trim() : value,
     }));
     setError('');
   };
@@ -66,6 +70,11 @@ const NewPost = () => {
   const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
+      if (!state.image) {
+        return alert('image is required');
+      }
+
+
       await dispatch(createProduct(state));
       navigate('/');
       await dispatch(fetchProduct());
@@ -100,6 +109,7 @@ const NewPost = () => {
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline/>
+
         <Box
           sx={{
             marginTop: 8,
@@ -108,10 +118,11 @@ const NewPost = () => {
             alignItems: 'center',
           }}
         >
+          <Button component={Link} to={`/`} size="small">Back</Button>
           <Typography component="h1" variant="h5">
             New post
           </Typography>
-          <Box component="form" noValidate onSubmit={submitFormHandler} sx={{mt: 3}}>
+          <Box component="form" onSubmit={submitFormHandler} sx={{mt: 3}}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField

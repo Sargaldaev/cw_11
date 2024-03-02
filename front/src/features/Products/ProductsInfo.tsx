@@ -1,19 +1,18 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../app/store.ts';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { deleteProduct, fetchProductInfo } from '../../store/product/productThunk.ts';
 import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
-import { Button, CircularProgress, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import CardActions from '@mui/material/CardActions';
 
 const ProductsInfo = () => {
   const {id} = useParams() as { id: string };
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const {productInfo, fetchLoadInfo} = useSelector((state: RootState) => state.product);
+  const {productInfo, fetchLoadInfo,deleteLoad} = useSelector((state: RootState) => state.product);
   const {user} = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
@@ -28,52 +27,66 @@ const ProductsInfo = () => {
   };
   return (
     <>
-      {
-        fetchLoadInfo ? <CircularProgress/> :
-          productInfo ?
-            <Card
-              sx={{width: 345}}
-            >
-              <CardMedia
-                sx={{height: 350}}
-                image={`http://localhost:8000/${productInfo.image}`}
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {productInfo.title}
-                </Typography>
+      <Button component={Link} to={`/`} size="small">Back</Button>
 
-                <Typography gutterBottom variant="h5" component="div">
-                  {productInfo.description}
-                </Typography>
+      <Box
+        display={'flex'}
+      >
 
-                <Typography gutterBottom variant="h5" component="div">
-                  {productInfo.category}
-                </Typography>
+        <img
+          style={{width:'500px'}}
+          src={`http://localhost:8000/${productInfo?.image}`}
+          alt="img"/>
+        {
+          fetchLoadInfo ? <CircularProgress/> :
+            productInfo ?
+              <Card
+                sx={{width: 545}}
+              >
 
-                <Typography gutterBottom variant="h5" component="div">
-                  {productInfo.user.username}
-                </Typography>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    <span style={{fontWeight:900}}>Title:</span>{productInfo.title}
+                  </Typography>
 
-                <Typography gutterBottom variant="h5" component="div">
-                  {productInfo.price} Kgz
-                </Typography>
-              </CardContent>
-              <CardActions>
-                {
-                  user?._id === productInfo.user._id ? (
-                    <Button
-                      onClick={() => deleteProductId(productInfo._id)}
-                    >
-                      delete
-                    </Button>
-                  ) : null
-                }
+                  <Typography gutterBottom variant="h5" component="div">
+                    <span style={{fontWeight:900}}>description:</span> {productInfo.description}
+                  </Typography>
 
-              </CardActions>
-            </Card> : null
-      }
+                  <Typography gutterBottom variant="h5" component="div">
+                    <span style={{fontWeight:900}}>Category:</span> {productInfo.category}
+                  </Typography>
 
+                  <Typography gutterBottom variant="h5" component="div">
+                    <span style={{fontWeight:900}}>Username:</span> {productInfo.user.username}
+                  </Typography>
+
+
+                  <Typography gutterBottom variant="h5" component="div">
+                    <span style={{fontWeight:900}}>Phone:</span> {productInfo.user.phone}
+                  </Typography>
+
+                  <Typography gutterBottom variant="h5" component="div">
+                    <span style={{fontWeight:900}}>Title:</span> {productInfo.price} Kgz
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  {
+                    user?._id === productInfo.user._id ? (
+                      <Button
+                        disabled={!!deleteLoad}
+                        onClick={() => deleteProductId(productInfo._id)}
+                      >
+                        delete
+                      </Button>
+                    ) : null
+                  }
+
+                </CardActions>
+              </Card> : null
+        }
+
+      </Box>
     </>
   );
 };

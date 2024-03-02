@@ -34,7 +34,7 @@ import Category from './models/Category';
     },
   );
 
-  const [AllItems,Car, Phone, Laptop] = await Category.create(
+  const [_, Car, Phone, Laptop] = await Category.create(
     {
       title: 'AllItems',
     },
@@ -53,50 +53,52 @@ import Category from './models/Category';
     {
       user: user_1._id,
       category: Laptop,
-      title: 'notebook',
-      description: 'notebook office work',
+      title: 'MacBook',
+      description: 'laptop office work',
       price: 199.0,
-      image: 'fixtures/laptop1.png',
+      image: 'fixtures/macbook.jpg',
     },
     {
       user: user_1._id,
       category: Laptop,
-      title: 'notebook',
-      description: 'notebook play Game',
+      title: 'Laptop hp',
+      description: 'Laptop play Game',
       price: 922.45,
       image: 'fixtures/laptop1.png',
+      phone: '0701-83-83-63',
     },
     {
       user: user_1._id,
       category: Car,
-      title: 'Mersedes ',
+      title: 'Mersedes',
       description: 'Best car',
       price: 38978,
+      phone: '0701-83-83-63',
       image: 'fixtures/Mercedes1.jpg',
     },
     {
       user: user_2._id,
       category: Car,
-      title: '2015 Mersedes s class',
-      description: 'I\'d like to know if the Used 2015 Mersedes Model S 85D you have listed on Cars.com for $22,995 is still available.',
+      title: 'BMW',
+      description: '2015 BMW Model S 85D',
       price: 25000,
-      image: 'fixtures/Mercedes1.jpg',
+      image: 'fixtures/bmw.png',
     },
     {
       user: user_2._id,
       category: Phone,
-      title: 'Orange',
-      description: 'eat orange',
+      title: 'IPhone 11',
+      description: 'black color',
       price: 34,
-      image: 'fixtures/orange.png',
+      image: 'fixtures/Iphone.jpg',
     },
     {
       user: user_1._id,
       category: Phone,
-      title: 'Ball',
-      description: 'Football playing ',
+      title: 'Samsung',
+      description: ' white color ',
       price: 1926,
-      image: 'fixtures/ball.jpeg',
+      image: 'fixtures/samsung.jpg',
     },
   );
 

@@ -7,7 +7,7 @@ export const fetchDataCategory = createAsyncThunk<Product[], string>(
   'product/fetchData',
   async (category) => {
     try {
-      const {data} = await axiosApi.get<Product[]>(`/products?category=${!category.trim() ? 'AllItems' : category}`);
+      const {data} = await axiosApi.get<Product[]>(`/products?category=${category}`);
       return data;
     } catch (e) {
       console.log(e);

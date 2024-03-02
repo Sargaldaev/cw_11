@@ -1,13 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../app/store.ts';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchDataCategory, fetchProduct } from '../../store/product/productThunk.ts';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import { Box, Button, CircularProgress, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Tab, Tabs, Typography } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
+import { fetchCategories } from '../../store/category/categoryThunk.ts';
 
 
 const Products = () => {
@@ -17,17 +18,47 @@ const Products = () => {
   const dispatch = useDispatch<AppDispatch>();
   const {products, fetchLoad} = useSelector((state: RootState) => state.product);
 
-  useEffect(() => {
-    if (categorySearch) {
-      dispatch(fetchDataCategory(categorySearch))
-    } else {
-      dispatch(fetchProduct())
+  const {categories} = useSelector((state: RootState) => state.category);
+  const [value, setValue] = useState('/');
+  const handleChange = (newValue: string) => {
+    setValue(newValue);
+  };
 
+  useEffect(() => {
+    dispatch(fetchCategories());
+
+    setValue(categorySearch || '/');
+
+  }, [dispatch, categorySearch]);
+  useEffect(() => {
+
+
+    if (!products.length) {
+      dispatch(fetchProduct());
     }
+
+  }, [dispatch, products]);
+
+
+  useEffect(() => {
+
+    dispatch(fetchDataCategory(categorySearch || ''));
 
   }, [dispatch, categorySearch]);
   return (
     <>
+      <Tabs value={value}>
+        {categories.map(({title, _id}, index) => (
+          <Tab
+            key={index}
+            label={title}
+            value={title === 'AllItems' ? '/' : _id}
+            onChange={() => handleChange(title)}
+            component={Link}
+            to={title === 'AllItems' ? '/' : `/products?category=${_id}`}
+          />
+        ))}
+      </Tabs>
       <Box
         sx={{marginTop: '90px'}}
       >
@@ -36,7 +67,7 @@ const Products = () => {
           display={'flex'}
           sx={
             {
-              gap: '10px',
+              gap: '30px',
               flexWrap: 'wrap'
             }
           }
